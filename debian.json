@@ -1,0 +1,44 @@
+{
+    "builders": [{
+	    
+        "name": "debian64-webserver-vbox",
+        "type": "virtualbox-iso",
+        "guest_os_type": "Debian_64",
+        "guest_additions_mode": "disable",
+        "iso_url": "d:/tulaDist/iso/debian-7.6.0-amd64-netinst.iso",
+        "iso_checksum": "8a3c2ad7fd7a9c4c7e9bcb5cae38c135",
+        "iso_checksum_type": "md5",
+        "ssh_username": "tuladev",
+        "ssh_password": "tuladev",
+		"ssh_port": 22,
+        "ssh_wait_timeout": "30m",
+        "shutdown_command": "echo 'packer' | shutdown -h now",
+        "vm_name": "my-webserver",
+        "format": "ova",
+        "hard_drive_interface": "sata",
+        "disk_size": 20000,
+        "vboxmanage": [
+            ["modifyvm", "{{.Name}}", "--memory", "1024"],
+            ["modifyvm", "{{.Name}}", "--cpus", "1"],
+            ["modifyvm", "{{.Name}}", "--vram", "10"]
+        ],
+        "boot_wait": "5s",
+ 		"boot_command": [
+        "<esc><wait>",
+        "install <wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US <wait>",
+        "auto <wait>",
+        "locale=en_US <wait>",
+        "kbd-chooser/method=us <wait>",
+        "keyboard-configuration/xkb-keymap=us <wait>",
+        "netcfg/get_hostname=Debian_64 <wait>",
+        "netcfg/get_domain=vagrantup.com <wait>",
+        "fb=false <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-keymaps-at/keymap=us <wait>",
+        "<enter><wait>"
+      ]
+    }]
+}
